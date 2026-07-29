@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCE - Business Context Engine | 产品文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-accent: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --accent-hover: #1d4ed8;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .hero {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            color: white;
+            padding: 60px 50px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            max-width: 600px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 24px 30px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-accent);
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-body {
+            padding: 30px;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Architecture */
+        .arch-diagram {
+            background: var(--bg-accent);
+            border-radius: var(--radius);
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-width: 600px;
+        }
+
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .arch-layer-label {
+            width: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: right;
+        }
+
+        .arch-layer-content {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            background: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .arch-box.highlight {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Pipeline Steps */
+        .pipeline-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .step-card {
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            background: var(--bg-accent);
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 0 auto 10px;
+        }
+
+        .step-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* QA Handlers */
+        .handler-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .handler-card {
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg-accent);
+        }
+
+        .handler-card h4 {
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .handler-card .handler-type {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .handler-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--bg-accent);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .data-table:hover {
+            background: #f8fafc;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .tag-blue { background: var(--accent-light); color: var(--accent); }
+        .tag-green { background: #ecfdf5; color: var(--success); }
+        .tag-orange { background: #fff7ed; color: var(--warning); }
+        .tag-red { background: #fef2f2; color: var(--danger); }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: var(--bg-accent);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .tech-icon {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        .tech-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .tech-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px 24px;
+            border-radius: var(--radius);
+            font-family: "SF Mono", Monaco, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .code-block .comment { color: #64748b; }
+        .code-block .string { color: #a5f3fc; }
+        .code-block .keyword { color: #c4b5fd; }
+
+        /* Tabs */
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .use-case {
+            padding: 24px;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--accent);
+            background: var(--bg-accent);
+        }
+
+        .use-case h4 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .use-case p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .use-case .example {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Divider */
+        .divider {
+            margin: 30px 0;
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { padding: 40px 24px; }
+            .hero h1 { font-size: 28px; }
+            .section-header { padding: 20px; }
+            .section-body { padding: 20px; }
+            .arch-layer-label { display: none; }
+        }
+
+        /* Relationship Tiers */
+        .tier-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .tier-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-accent);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .tier-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .tier-badge.t1 { background: #dcfce7; color: var(--success); }
+        .tier-badge.t2 { background: #fef3c7; color: var(--warning); }
+        .tier-badge.t3 { background: #e0e7ff; color: #6366f1; }
+
+        .tier-info h4 {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .tier-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Evidence Layer */
+        .evidence-layers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .evidence-layer {
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--bg-accent);
+        }
+
+        .evidence-layer h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .evidence-layer p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>●</span> AI-Native Business Context Engine v1.0
+        </div>
+        <h1>BCE · 业务上下文引擎</h1>
+        <p class="hero-subtitle">
+            结构化管理您的业务知识资产 —— 让周报、复盘、纪要不再沉没，转化为可查询、可追溯、可推理的业务上下文
+        </p>
+        <div class="hero-meta">
+            <span>🗓 开发周期：2026-07 ~ 至今</span>
+            <span>📊 累计迭代 24+ 版本</span>
+            <span>✅ 测试覆盖：28 条核心路径</span>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">9</div>
+            <div class="stat-label">Pipeline 处理阶段</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Q&A 处理 Handler</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">3</div>
+            <div class="stat-label">前端应用形态</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">1310</div>
+            <div class="stat-label">宽表数据行（10周×11品类）</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">12+</div>
+            <div class="stat-label">核心数据模型表</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">LLM</div>
+            <div class="stat-label">智谱 GLM 多模型链</div>
+        </div>
+    </div>
+
+    <!-- Product Definition -->
+    <section class="section">
+        <div class="section-header">
+            <h2>📌 产品定位</h2>
+        </div>
+        <div class="section-body">
+            <p style="font-size: 16px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px;">
+                <strong style="color: var(--text-primary);">BCE (Business Context Engine)</strong> 是一款 AI 原生的业务上下文引擎，专注于解决业务团队"知识散落、信息断层、决策无痕"的痛点。
+                它通过结构化的方式摄入业务文档（周报、复盘、会议纪要），将非结构化的知识转化为可查询、可追溯、可推理的结构化数据资产。
+            </p>
+
+            <div class="use-cases">
+                <div class="use-case">
+                    <h4>📈 指标波动归因</h4>
+                    <p>自动关联历史文档中关于同一指标的归因、决策与结果，追溯"为什么下降 12%"背后的完整故事</p>
+                    <div class="example">"为什么 GMV 最近下降了？" → 返回渠道预算骤减40% → 决策：临时调配 → 结果：3周后恢复</div>
+                </div>
+                <div class="use-case">
+                    <h4>🔢 数值事实问答</h4>
+                    <p>基于宽表 metric_facts 实现 NL→SQL，精确到个位数的指标查询</p>
+                    <div class="example">"肉类Q3毛利率排名" → LLM 生成 SQL → 查询宽表 → 返回精确数值</div>
+                </div>
+                <div class="use-case">
+                    <h4>🕸️ 实体关系发现</h4>
+                    <p>自动从文档中提取因果关系，构建实体关联图谱</p>
+                    <div class="example">"渠道B预算 → 新客获取量 → GMV" 自动建立 Tier-1 显式关系</div>
+                </div>
+                <div class="use-case">
+                    <h4>📚 决策追溯重建</h4>
+                    <p>每条事件关联决策动作、责任人、应对结果，形成完整决策闭环</p>
+                    <div class="example">"上次遇到类似情况怎么处理的？" → 定位历史匹配事件 + 决策 + 成败标记</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🏗 系统架构</h2>
+        </div>
+        <div class="section-body">
+            <div class="arch-diagram">
+                <div class="arch-layers">
+                    <div class="arch-layer">
+                        <div class="arch-layer-label">接入层</div>
+                        <div class="arch-layer-content">
+                            <div class="arch-box">Web 前端 (React 18)</div>
+                            <div class="arch-box">Chrome Extension (MV3)</div>
+                            <div class="arch-box">飞书 IM Bot</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-label">API 层</div>
+                        <div class="arch-layer-content">
+                            <div class="arch-box highlight">FastAPI REST</div>
+                            <div class="arch-box highlight">SSE 流式 /ask/stream</div>
+                            <div class="arch-box">CORS + JWT 权限</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-label">业务层</div>
+                        <div class="arch-layer-content">
+                            <div class="arch-box">9步 Pipeline 编排器</div>
+                            <div class="arch-box">6类 Q&A Handler</div>
+                            <div class="arch-box">实体归一化引擎</div>
+                            <div class="arch-box">3层证据调和</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-label">AI 层</div>
+                        <div class="arch-layer-content">
+                            <div class="arch-box">智谱 GLM 多模型链</div>
+                            <div class="arch-box">LLM 抽取 + 校验</div>
+                            <div class="arch-box">NL→SQL 生成器</div>
+                            <div class="arch-box">限流/退避/降级</div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="arch-layer-label">存储层</div>
+                        <div class="arch-layer-content">
+                            <div class="arch-box highlight">SQLite (WAL)</div>
+                            <div class="arch-box">12+ 表</div>
+                            <div class="arch-box">宽表 metric_facts</div>
+                            <div class="arch-box">证据 + 关系 + 洞察</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline -->
+    <section class="section">
+        <div class="section-header">
+            <h2>⚙️ 9 步 Pipeline 编排器</h2>
+        </div>
+        <div class="section-body">
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
+                文档摄入采用"规则先行 + LLM 补充 + 交叉校验"的分层策略，结构化文档（含表格）优先走规则路径提取确定性数字，纯叙述文档由 LLM 做完整因果抽取。
+            </p>
+
+            <div class="pipeline-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-name">文档解析</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-name">规则提取</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-name">分段 LLM</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-name">交叉校验</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <div class="step-name">实体归一</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <div class="step-name">时序检查</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">7</div>
+                    <div class="step-name">证据调和</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">8</div>
+                    <div class="step-name">跨实体关联</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">9</div>
+                    <div class="step-name">入库+推送</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="comment"># Pipeline 伪代码示例</span>
+parsed = <span class="keyword">parse_markdown</span>(content)
+rule_facts = <span class="keyword">extract_rule_facts</span>(content)  <span class="comment"># 确定性数字</span>
+extraction = <span class="keyword">await</span> extract_from_document(context)  <span class="comment"># LLM 因果抽取</span>
+sections = <span class="keyword">_split_sections</span>(content)
+results = <span class="keyword">await</span> asyncio.gather(*[
+    extract_one(s) <span class="keyword">for</span> s <span class="keyword">in</span> sections  <span class="comment"># 并行分段</span>
+])
+<span class="keyword">conflicts</span> = <span class="keyword">_cross_validate</span>(extraction, rule_facts)
+store_extracted_events(extraction, doc_id, entity_mapping)
+<span class="keyword">await</span> reconcile_evidence(entity_id)  <span class="comment"># 证据衰减 + 冲突检测</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Q&A Handlers -->
+    <section class="section">
+        <div class="section-header">
+            <h2>💬 智能问答系统</h2>
+        </div>
+        <div class="section-body">
+            <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">
+                采用"意图路由 + Handler 分发 + LLM 兜底"的多层架构。核心原则：<strong>LLM 不参与计算，所有计算在 SQL/Python 层完成</strong>。
+                数值型问题统一走 NL→SQL 查宽表（精确快），叙事型问题走时间线路径（有因果链），两者不竞争各管各的层。
+            </p>
+
+            <div class="handler-grid">
+                <div class="handler-card">
+                    <div class="handler-type">METRIC_SQL</div>
+                    <h4>数值查询</h4>
+                    <p>排名/最高/最低/趋势 → LLM 生成 SQL → 查宽表 metric_facts → 格式化返回精确数值</p>
+                </div>
+                <div class="handler-card">
+                    <div class="handler-type">FACTUAL</div>
+                    <h4>事实查询</h4>
+                    <p>"GMV 最新值" → 读 metric_value + metric_unit + metric_delta_pct 字段，格式化输出</p>
+                </div>
+                <div class="handler-card">
+                    <div class="handler-type">AGGREGATION</div>
+                    <h4>聚合统计</h4>
+                    <p>波动次数 / 高频归因 / 子实体贡献度 → Python 预计算 → 文本格式化</p>
+                </div>
+                <div class="handler-card">
+                    <div class="handler-type">COMPARISON</div>
+                    <h4>对比分析</h4>
+                    <p>多实体并排对比 → SQL 批量查预计算指标 → LLM 解释差异</p>
+                </div>
+                <div class="handler-card">
+                    <div class="handler-type">ANALYTICAL</div>
+                    <h4>归因推理</h4>
+                    <p>"为什么下降" → 收集时间线 + 指标 + 子实体 → LLM 推理 → 校验 → 降级规则</p>
+                </div>
+                <div class="handler-card">
+                    <div class="handler-type">WHAT_IF</div>
+                    <h4>情景分析</h4>
+                    <p>"涨价 10%" → Python Decimal 精确计算波动率变化 → LLM 解释</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; padding: 20px; background: var(--accent-light); border-radius: var(--radius);">
+                <h4 style="font-size: 14px; margin-bottom: 10px; color: var(--accent);">🔌 流式输出 (SSE)</h4>
+                <p style="font-size: 13px; color: var(--text-secondary);">
+                    POST /api/v1/ask/stream 支持 Server-Sent Events 逐 chunk 返回，前端 ChatPanel 消费 ReadableStream，
+                    实现打字机效果。格式：<code>{"type": "chunk", "content": "..."}</code>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evidence Reconciliation -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🔍 三层证据调和机制</h2>
+        </div>
+        <div class="section-body">
+            <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 14px;">
+                设计原则：<strong>不自动"定罪"，冲突只标记人做最终裁判。</strong> 新证据涌入时自动评估历史证据的可信度。
+            </p>
+
+            <div class="evidence-layers">
+                <div class="evidence-layer">
+                    <h4>📉 Layer 1 · 置信度衰减</h4>
+                    <p>effective_score = base × max(0.3, 1 - 0.05 × weeks)<br>越旧的证据权重越低，保留底线 30%</p>
+                </div>
+                <div class="evidence-layer">
+                    <h4>🤖 Layer 2 · LLM 冲突检测</h4>
+                    <p>4 档判定：一致 / 补充 / 部分矛盾 / 完全推翻<br>数字冲突自动进入 review_queue</p>
+                </div>
+                <div class="evidence-layer">
+                    <h4>🛡 Layer 3 · 共识保护</h4>
+                    <p>≥3 份证据支持的共识，单份推翻不生效<br>标记 NEEDS_REVIEW 等待人工裁判</p>
+                </div>
+            </div>
+
+            <h4 style="margin-top: 24px; margin-bottom: 12px; font-size: 14px;">证据证据评分体系</h4>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>reason_code</th>
+                        <th>基础分</th>
+                        <th>语义</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag tag-blue">FIRST_MENTION</span></td>
+                        <td>5.0</td>
+                        <td>实体首次出现源文档</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-blue">FINAL_RESOLUTION</span></td>
+                        <td>5.0</td>
+                        <td>事件的最终解决文档</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-green">FAILED_CASE</span></td>
+                        <td>4.0</td>
+                        <td>失败案例 — 经验教训价值</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-orange">HIGH_SIMILARITY</span></td>
+                        <td>3.0</td>
+                        <td>与已知事件高度相关</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-red">REGULAR</span></td>
+                        <td>2.0</td>
+                        <td>普通提及</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Entity Relationships -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🔗 跨实体关系发现</h2>
+        </div>
+        <div class="section-body">
+            <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 14px;">
+                3 级置信度分层：显式因果自动入库，LLM 推断标 source=llm_inferred，时序共现需≥2 次升级。
+                低置信度且 4 周无新证据的候选自动清除。
+            </p>
+
+            <div class="tier-list">
+                <div class="tier-item">
+                    <div class="tier-badge t1">T1</div>
+                    <div class="tier-info">
+                        <h4>显式因果 · 置信度 0.9</h4>
+                        <p>文档中明确使用"导致"、"使得"、"因为...所以"等句式，自动入库</p>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <div class="tier-badge t2">T2</div>
+                    <div class="tier-info">
+                        <h4>LLM 推断 · 置信度 0.6</h4>
+                        <p>基于上下文语义推断的隐藏关系，标 source=llm_inferred 供人工复核</p>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <div class="tier-badge t3">T3</div>
+                    <div class="tier-info">
+                        <h4>时序共现 · 置信度 0.3</h4>
+                        <p>多文档中反复共同出现，≥2 次共现升级为 T2 候选</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding: 16px; background: var(--bg-accent); border-radius: var(--radius);">
+                <p style="font-size: 13px; color: var(--text-secondary);">
+                    <strong>前端展示：</strong> RelationshipBar 组件以水平 chips 展示关联实体，可点击跳转；默认只展示置信度 ≥ 0.5 的关系。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Three Frontends -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🖥 三端产品形态</h2>
+        </div>
+        <div class="section-body">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Web 主应用</h3>
+                    <p><strong>React 18 + Vite + TypeScript + Recharts</strong></p>
+                    <p style="margin-top: 8px;">双栏布局：左侧文档阅读 + 右侧 Context Panel。四 Tab：历史趋势图（ComposedChart）、决策、证据、洞察。支持飞书知识库一键同步。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Chrome Extension</h3>
+                    <p><strong>MV3 + Shadow DOM + IntersectionObserver</strong></p>
+                    <p style="margin-top: 8px;">阅读伴随式体验：自动识别页面中的 GMV/CTR 等业务实体，浅黄下划线标记。300ms hover 迷你卡片 → 点击弹出完整 Context Panel。4h 字典缓存 + Demo Mode 降级。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🐦</div>
+                    <h3>飞书集成</h3>
+                    <p><strong>Lark API + 富文本推送 + 知识库同步</strong></p>
+                    <p style="margin-top: 8px;">tenant_access_token 自动刷新，文档同步自动推送 IM 消息（实体+事件+决策计数）。支持 push-test 验证、权限 JWT 7天过期+实时校验。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🛠 技术栈</h2>
+        </div>
+        <div class="section-body">
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">Py</div>
+                    <div class="tech-info">
+                        <h4>FastAPI</h4>
+                        <p>异步 REST API</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">DB</div>
+                    <div class="tech-info">
+                        <h4>SQLite (WAL)</h4>
+                        <p>嵌入式 + 迁移</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">LL</div>
+                    <div class="tech-info">
+                        <h4>智谱 GLM</h4>
+                        <p>多模型降级链</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">Re</div>
+                    <div class="tech-info">
+                        <h4>React 18</h4>
+                        <p>Hooks + TypeScript</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">Vt</div>
+                    <div class="tech-info">
+                        <h4>Vite 5</h4>
+                        <p>快速构建</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">Ch</div>
+                    <div class="tech-info">
+                        <h4>Recharts 3</h4>
+                        <p>组合图表</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">MV</div>
+                    <div class="tech-info">
+                        <h4>Chrome MV3</h4>
+                        <p>Extension</p>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">Py</div>
+                    <div class="tech-info">
+                        <h4>PyJWT</h4>
+                        <p>令牌安全</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <h4 style="font-size: 14px; margin-bottom: 12px;">LLM 模型降级链</h4>
+                <div class="code-block">
+文本：glm-4.7-flash → glm-4-flash-250414 → glm-4-flash<br>
+多模态：glm-4.6v-flash → glm-4.1v-thinking-flash → glm-4v-flash<br>
+生图：cogview-3-flash　视频：cogvideox-flash<br>
+机制：429 指数退避 (5s → 10s → 20s) + 请求间隔 2s + 连接复用
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Model -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🗄 数据模型概览</h2>
+        </div>
+        <div class="section-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>表名</th>
+                        <th>用途</th>
+                        <th>关键字段</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag tag-blue">documents</span></td>
+                        <td>摄入文档</td>
+                        <td>doc_id, title, content, source_url, doc_version, superseded_by</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-blue">entities</span></td>
+                        <td>业务实体</td>
+                        <td>entity_id, entity_name, category, parent_entity_id, level, default_sensitivity</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-blue">entity_aliases</span></td>
+                        <td>实体别名</td>
+                        <td>alias_name → entity_id（双向子串匹配归一）</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-green">timeline_events</span></td>
+                        <td>时间线事件</td>
+                        <td>event_id, entity_id, occurred_at, summary, attribution, decision, metric_value*</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-green">decisions</span></td>
+                        <td>决策记录</td>
+                        <td>action_taken, owner, outcome, outcome_detail</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-green">evidence_links</span></td>
+                        <td>证据链</td>
+                        <td>importance_score, reason_code, effective_score, superseded_by</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-orange">entity_relationships</span></td>
+                        <td>实体关系</td>
+                        <td>source, target, relation_type, confidence, evidence_doc_id</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-orange">metric_facts</span></td>
+                        <td>数仓宽表</td>
+                        <td>report_date, week_label, category, merchant_type, metric_name, metric_value, wow_change_pct</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-orange">review_queue</span></td>
+                        <td>人工审核队列</td>
+                        <td>conflict_type, description, old_value, new_value, status</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-red">push_events</span></td>
+                        <td>推送埋点</td>
+                        <td>push_id, doc_id, user_id, event_type (sent/clicked/viewed)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-red">users</span></td>
+                        <td>用户权限</td>
+                        <td>user_id, role, max_sensitivity, has_global_view, lark_user_id</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-red">insights</span></td>
+                        <td>洞察收集</td>
+                        <td>author_id, raw_text, entity_id, metric_snapshot, status</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Security & Reliability -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🛡 安全与可靠性</h2>
+        </div>
+        <div class="section-body">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>安全加固</h3>
+                    <p>JWT 7 天过期 + 实时 DB 权限校验<br>CORS 限定 localhost 来源<br>.env + .gitignore 防雷露<br>X-User-Role 仅 dev 信任</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3>幻觉对抗</h3>
+                    <p>answer_validator 数字校验<br>LLM 答案与预计算指标比对<br>校验失败降级规则引擎置信度</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📉</div>
+                    <h3>优雅降级</h3>
+                    <p>LLM 不可用 → 规则引擎<br>后端离线 → 前端 Demo Mode<br>Extension 超时 → Mock 数据兜底<br>Ask triple-fallback 链</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>性能优化</h3>
+                    <p>N+1 → 批量查询<br>分段并行抽取 (Semaphore 3)<br>模块级缓存 5min TTL<br>HTTP keep-alive 连接复用</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>数据一致性</h3>
+                    <p>INSERT ON CONFLICT DO UPDATE<br>ALTER TABLE 列级迁移<br>文档版本化 (deprecated 标记进历史)<br>WAL 模式 + 外键约束</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>测试覆盖</h3>
+                    <p>pytest + pytest-asyncio，28 条用例<br>覆盖：归一化/权限/JWT/CRUD/路由<br>临时 DB 隔离，互不干扰</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section class="section">
+        <div class="section-header">
+            <h2>📡 API 端点速查</h2>
+        </div>
+        <div class="section-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>方法</th>
+                        <th>路径</th>
+                        <th>用途</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>GET</td><td>/api/v1/health</td><td>健康检查</td></tr>
+                    <tr><td>GET</td><td>/api/v1/entities</td><td>实体列表（含别名）</td></tr>
+                    <tr><td>GET</td><td>/api/v1/entities/hierarchy</td><td>实体层级树</td></tr>
+                    <tr><td>GET</td><td>/api/v1/context?entity_id={id}</td><td>完整上下文（时间线+证据+洞察）</td></tr>
+                    <tr><td>POST</td><td>/api/v1/documents/ingest</td><td>摄入文档（异步）</td></tr>
+                    <tr><td>GET</td><td>/api/v1/documents</td><td>已导入文档列表</td></tr>
+                    <tr><td>POST</td><td>/api/v1/ask</td><td>智能问答</td></tr>
+                    <tr><td>POST</td><td>/api/v1/ask/stream</td><td>流式问答 (SSE)</td></tr>
+                    <tr><td>GET</td><td>/api/v1/entities/{id}/relationships</td><td>实体关系</td></tr>
+                    <tr><td>POST</td><td>/api/v1/lark/sync</td><td>飞书知识库同步</td></tr>
+                    <tr><td>POST</td><td>/api/v1/lark/push</td><td>飞书 IM 推送</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Design Philosophy -->
+    <section class="section">
+        <div class="section-header">
+            <h2>💎 设计哲学</h2>
+        </div>
+        <div class="section-body">
+            <div class="use-cases">
+                <div class="use-case">
+                    <h4>👨‍⚖️ 不自动"定罪"</h4>
+                    <p>冲突只标记人做最终裁判。review_queue 机制保证每条矛盾数据可追溯、可人工裁定。</p>
+                </div>
+                <div class="use-case">
+                    <h4>📊 置信度分级</h4>
+                    <p>0.3 / 0.6 / 0.9 三层，前端默认展示 ≥ 0.5。用户可纠正每个自动化决策。</p>
+                </div>
+                <div class="use-case">
+                    <h4>⏳ 衰减 + Pruning</h4>
+                    <p>过时证据自动降权，候选关系 4 周无新证据自动清除。系统会"遗忘"。</p>
+                </div>
+                <div class="use-case">
+                    <h4>🔀 数据库即真相</h4>
+                    <p>LLM 只负责推理，不存储结果。每次问答重新从 DB 查询计算，保证数据源头一致。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dev History -->
+    <section class="section">
+        <div class="section-header">
+            <h2>📅 开发历程</h2>
+        </div>
+        <div class="section-body">
+            <div class="tier-list">
+                <div class="tier-item">
+                    <div class="tier-badge t1">7/24</div>
+                    <div class="tier-info">
+                        <h4>Stage 1/2/3 并行交付 + 信息密度调优</h4>
+                        <p>后端 Pipeline + 前端 React + Chrome Extension 同步交付。约束路径首屏 + Tab 发散探索的信息架构。修复 19 项审查问题。</p>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <div class="tier-badge t2">7/28</div>
+                    <div class="tier-info">
+                        <h4>全量优化 5 批次</h4>
+                        <p>安全加固(JWT/CORS/密钥)、SSE 流式对齐、性能优化(N+1→批量、并行抽取)、工程质量(logging/死代码→清理)、测试基建(28条)。</p>
+                    </div>
+                </div>
+                <div class="tier-item">
+                    <div class="tier-badge t3">7/29</div>
+                    <div class="tier-info">
+                        <h4>V4 飞书集成 + metric_facts 宽表</h4>
+                        <p>lark 模块创建（auth/doc_sync/im_push）、IM Pipeline 推送、前端飞书 Tab、V4 数据层修复（metric_value 精确存储）、Ask NL→SQL 路由。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Footer -->
+    <div class="footer">
+        <p style="font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">BCE · Business Context Engine</p>
+        <p>AI-Native · 让业务知识可追溯、可查询、可推理</p>
+        <p style="margin-top: 12px;">开发：辛迪 · 架构：全栈 (React + FastAPI + SQLite + LLM)</p>
+        <p style="margin-top: 4px; font-size: 12px;">文档生成时间：2026-07-29 · 基于完整代码深度分析</p>
+    </div>
+</div>
+</body>
+</html>

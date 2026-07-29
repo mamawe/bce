@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "BCE 业务上下文引擎",
+  "version": "1.0.0",
+  "description": "阅读伴随式业务上下文引擎：自动识别业务实体（GMV、CTR、DAU 等），悬停查看时间线、决策、证据与洞察。",
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "BCE 业务上下文引擎"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/mock-data.js", "content/panel.js", "content/content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}

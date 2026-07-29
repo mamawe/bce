@@ -1,0 +1,37 @@
+edition: 3.0.0
+name: bce-backend
+access: default
+
+vars:
+  region: cn-hangzhou
+
+resources:
+  bce-service:
+    component: fc
+    props:
+      region: ${vars.region}
+      service:
+        name: bce-service
+        description: "BCE Business Context Engine"
+      function:
+        name: bce-api
+        description: "FastAPI Custom Runtime with embedded SQLite"
+        runtime: custom
+        codeUri: ./
+        handler: dummy.handler
+        caPort: 9000
+        memorySize: 512
+        diskSize: 512
+        timeout: 120
+        environmentVariables:
+          LLM_API_KEY: your-zhipu-api-key
+          LLM_ENDPOINT: https://open.bigmodel.cn/api/paas/v4/chat/completions
+          LLM_MODEL: glm-4.7-flash
+          BCE_ENV: production
+          BCE_DB_PATH: /tmp/bce.db
+          BCE_ALLOWED_ORIGINS: '*'
+        customRuntimeConfig:
+          command:
+            - bash
+          args:
+            - bootstrap

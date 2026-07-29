@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.venv*/
+
+# Environment
+.env
+.env.local
+
+# Database
+*.db
+*.db-journal
+*.db-wal
+
+# Node
+node_modules/
+dist/
+frontend/dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Vercel
+.vercel/
+
+# MacOS
+.DS_Store
+*.DS_Store
+
+# Test/scratch
+catdesk-pet/
+
+# Logs
+*.log
