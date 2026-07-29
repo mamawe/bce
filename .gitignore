@@ -38,3 +38,10 @@ catdesk-pet/
 
 # Logs
 *.log
+
+# FC deployment artifacts
+fc-deploy/lib/
+fc-deploy/wheels/
+fc-deploy/bce.db
+fc-deploy/bce.db-*
+backend/bce.db-*
