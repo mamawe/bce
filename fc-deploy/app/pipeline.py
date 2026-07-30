@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 BCE 导入管道编排器 - 完整的文档摄取流程
 Step 1: 解析文档
@@ -15,7 +16,7 @@ import uuid
 import asyncio
 import logging
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Optional
 
 from app.parser.document_parser import parse_markdown, build_extraction_context
 from app.extractor.llm_extractor import extract_from_document, extract_section
@@ -72,7 +73,7 @@ async def _extract_sections_parallel(
     """并行提取各章节的因果关系，最多 3 个并发 LLM 调用。"""
     sem = asyncio.Semaphore(3)
 
-    async def extract_one(section: dict[str, str]) -> dict | None:
+    async def extract_one(section: dict[str, str]) -> Optional[dict]:
         if len(section["content"]) < 50:
             return None
         async with sem:

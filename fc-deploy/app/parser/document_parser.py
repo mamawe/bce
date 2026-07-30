@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 文档解析器 - 将 Markdown 周报拆分为结构化块
 """

@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """Feishu document sync — pull wiki docs via lark-cli (user identity).
 
 Uses lark-cli with --as user to bypass bot membership requirements.
@@ -13,7 +15,7 @@ logger = logging.getLogger(__name__)
 LARK_CLI = shutil.which("lark-cli") or "/Users/alex/.qoderworkcn/bin/lark-cli"
 
 
-async def _run_cli(args: list[str]) -> dict | None:
+async def _run_cli(args: list[str]) -> Optional[dict]:
     """Run lark-cli command and parse JSON output."""
     cmd = [LARK_CLI] + args
     try:

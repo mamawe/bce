@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 LLM 洞察生成器 - 用 LLM 推理替换规则引擎
 失败时自动降级到规则引擎（insight.py）

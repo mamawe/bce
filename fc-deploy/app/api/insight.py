@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 洞察生成器 - 基于实体时间线生成模式识别、风险提示和建议
 MVP 阶段使用规则引擎，不依赖 LLM

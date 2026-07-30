@@ -1,3 +1,4 @@
+from __future__ import annotations
 """Feishu app configuration."""
 import os
 

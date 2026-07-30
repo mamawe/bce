@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 证据排序器 - 按重要性对实体关联的文档进行排序
 权重: FIRST_MENTION=5.0, FINAL_RESOLUTION=5.0, FAILED_CASE=4.0, HIGH_SIMILARITY=3.0, REGULAR=2.0

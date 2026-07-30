@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 BCE 配置中心 — 模型降级链、API 端点、多模态模型
 通过 .env 文件加载，支持模型自动降级

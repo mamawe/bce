@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 洞察处理模块 — LLM 语义拆解与分类
 

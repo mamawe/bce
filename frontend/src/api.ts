@@ -13,16 +13,29 @@ const ASK_TIMEOUT_MS = 30000 // /ask 需要 LLM 推理，超时放宽到 30s
 const INSIGHT_TIMEOUT_MS = 30000 // /context/{id}/insight 需要 LLM 推理
 const INGEST_TIMEOUT_MS = 300000 // /documents/ingest 需要 LLM 抽取，超时放宽到 5min
 
-async function tryFetchJson(path: string, timeoutMs = TIMEOUT_MS): Promise<unknown> {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), timeoutMs)
-  try {
-    const res = await fetch(BASE + path, { signal: controller.signal })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return await res.json()
-  } finally {
-    clearTimeout(timer)
+async function tryFetchJson(path: string, timeoutMs = TIMEOUT_MS, retries = 0): Promise<unknown> {
+  let lastErr: unknown
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    try {
+      const res = await fetch(BASE + path, { signal: controller.signal })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      return await res.json()
+    } catch (err) {
+      lastErr = err
+      // 非 AbortError 直接抛出（业务错误无需重试）
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        // 超时节流：避免立即重试打到冷启动中的后端，等 1s
+        if (attempt < retries) await new Promise((r) => setTimeout(r, 1000))
+        continue
+      }
+      throw err
+    } finally {
+      clearTimeout(timer)
+    }
   }
+  throw lastErr
 }
 
 async function tryPostJson(path: string, body: unknown, timeoutMs = TIMEOUT_MS): Promise<unknown> {
@@ -78,7 +91,7 @@ export interface LoadResult<T> {
 
 export async function loadEntities(): Promise<LoadResult<Entity[]>> {
   try {
-    const json = (await tryFetchJson('/entities', ENTITIES_TIMEOUT_MS)) as { entities?: Entity[] }
+    const json = (await tryFetchJson('/entities', ENTITIES_TIMEOUT_MS, 2)) as { entities?: Entity[] }
     if (Array.isArray(json?.entities) && json.entities.length > 0) {
       return { data: json.entities, live: true }
     }
@@ -119,7 +132,7 @@ export async function loadInsight(entityId: string): Promise<InsightResult | nul
 
 export async function loadEntityHierarchy(): Promise<LoadResult<EntityTreeNode>> {
   try {
-    const json = (await tryFetchJson('/entities/hierarchy', ENTITIES_TIMEOUT_MS)) as { tree?: EntityTreeNode }
+    const json = (await tryFetchJson('/entities/hierarchy', ENTITIES_TIMEOUT_MS, 2)) as { tree?: EntityTreeNode }
     if (json?.tree && Object.keys(json.tree).length > 0) {
       return { data: json.tree, live: true }
     }

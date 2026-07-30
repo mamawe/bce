@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 实体层级管理 - 递归查询、roll-up、drill-down
 基于 SQLite WITH RECURSIVE 实现多级实体分类

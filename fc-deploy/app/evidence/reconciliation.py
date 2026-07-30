@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 证据调和模块 - 处理新旧文档证据冲突
 Layer 1: 置信度衰减（自动，无 LLM）

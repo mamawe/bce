@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """Feishu IM push — send notifications with BCE links."""
 import json
 import logging
@@ -8,7 +10,7 @@ from .config import LARK_BASE_URL
 logger = logging.getLogger(__name__)
 
 
-async def send_text_message(receive_id: str, text: str, receive_id_type: str = "open_id", token: str | None = None):
+async def send_text_message(receive_id: str, text: str, receive_id_type: str = "open_id", token: Optional[str] = None):
     """Send a plain text message."""
     token = token or await get_tenant_access_token()
     async with httpx.AsyncClient(timeout=10) as client:
@@ -46,7 +48,7 @@ async def send_push_notification(
     summary_lines: list[str],
     bce_link: str,
     receive_id_type: str = "open_id",
-    token: str | None = None,
+    token: Optional[str] = None,
 ):
     """Send a rich-text push notification with BCE link."""
     token = token or await get_tenant_access_token()

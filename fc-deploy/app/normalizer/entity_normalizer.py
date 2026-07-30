@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 实体标准化器 - 将 LLM 提取的原始实体名映射到已有实体或创建新实体
 维护别名表，支持大小写不敏感匹配
@@ -6,7 +7,7 @@ from app import database as db
 
 # ─── 模块级缓存 ─────────────────────────────────────────────────
 # 缓存结构: {entity_id: {"entity_name": str, "category": str, "aliases": [str, ...]}}
-_entity_cache: dict[str, dict] | None = None
+_entity_cache = None
 
 
 def _load_cache() -> dict[str, dict]:

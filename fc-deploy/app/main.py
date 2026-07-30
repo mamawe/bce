@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 BCE - Business Context Engine
 FastAPI 主入口，含生命周期管理和样本数据自动导入

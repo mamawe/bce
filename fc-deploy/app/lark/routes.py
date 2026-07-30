@@ -1,5 +1,7 @@
+from __future__ import annotations
 """Feishu integration API routes."""
 import logging
+from typing import List
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
@@ -22,7 +24,7 @@ class PushTestRequest(BaseModel):
 class PushRequest(BaseModel):
     receive_id: str
     doc_title: str
-    summary_lines: list[str]
+    summary_lines: List[str]
     bce_link: str
 
 

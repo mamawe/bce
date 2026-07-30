@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Ask 端点处理器 - 语义理解 + 维度拆解 + 通用指标查询
 核心原则：
@@ -19,8 +20,8 @@ from app.normalizer import entity_hierarchy
 
 # ─── 实体字典缓存（5 分钟刷新） ──────────────────────────────────
 
-_entity_dict_cache: dict | None = None
-_entity_dict_cache_time: float = 0
+_entity_dict_cache = None
+_entity_dict_cache_time = 0
 
 
 def _get_entity_dict() -> dict:
@@ -257,7 +258,7 @@ def extract_entities_from_question(question: str) -> list[dict]:
 
 
 # 实体对推导的缓存（同一问题的实体对，供 handle_ask 读取）
-_last_entity_pairs: list[dict] = []
+_last_entity_pairs = []
 
 
 def _derive_entity_pairs(entities: list[dict]) -> list[dict]:

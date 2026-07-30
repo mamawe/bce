@@ -1,3 +1,4 @@
+from __future__ import annotations
 """Feishu tenant access token management with auto-refresh."""
 import time
 import logging

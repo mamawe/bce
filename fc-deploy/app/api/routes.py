@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 API 路由 - BCE 核心接口
 v2 新增：POST /ask 端点、实体层级 API、LLM 洞察
@@ -8,7 +9,7 @@ import asyncio
 import json
 import uuid
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
@@ -70,14 +71,14 @@ class IngestResponse(BaseModel):
 
 class AskRequest(BaseModel):
     question: str
-    context: dict | None = None
+    context: Optional[Dict] = None
 
 
 class PushGenerateRequest(BaseModel):
     doc_id: str
     user_id: str
     role: str = "viewer"
-    push_id: str | None = None  # 可选：用于埋点关联，缺省时自动生成
+    push_id: Optional[str] = None  # 可选：用于埋点关联，缺省时自动生成
     base_url: str = ""          # 可选：链接前缀，缺省用相对路径
 
 
@@ -582,10 +583,10 @@ _INSIGHT_MAX_TEXT_LEN = 5000  # 单条洞察原文最大长度
 class InsightSubmitRequest(BaseModel):
     author_id: str
     raw_text: str
-    push_id: str | None = None
-    doc_id: str | None = None
-    entity_id: str | None = None
-    metric_snapshot: str | None = None
+    push_id: Optional[str] = None
+    doc_id: Optional[str] = None
+    entity_id: Optional[str] = None
+    metric_snapshot: Optional[str] = None
 
 
 async def _process_insight_async(task_id: str, insight_id: str, req: InsightSubmitRequest,
@@ -758,8 +759,8 @@ async def get_insight_detail(insight_id: str, request: Request):
 @router.get("/insights")
 async def list_insights(
     request: Request,
-    entity_id: str | None = None,
-    author_id: str | None = None,
+    entity_id: Optional[str] = None,
+    author_id: Optional[str] = None,
     limit: int = 50,
 ):
     """列出洞察（按实体或作者筛选），需登录"""
@@ -845,7 +846,7 @@ async def _process_distill_async(
     task_id: str,
     fragments: list[dict],
     sample_hash: str,
-    category: str | None,
+    category: Optional[str],
     user_id: str,
 ):
     """
@@ -908,7 +909,7 @@ async def _process_distill_async(
 async def distill_insights(
     request: Request,
     sample_size: int = 30,
-    category: str | None = None,
+    category: Optional[str] = None,
     force: bool = False,
 ):
     """

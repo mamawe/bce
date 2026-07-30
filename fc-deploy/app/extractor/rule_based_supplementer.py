@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """
 规则型后处理器 - 补充 LLM 提取遗漏的实体和时间线事件
 
@@ -213,8 +215,8 @@ def parse_metric_values(summary: str) -> dict:
         "毛利率 | 19.2%"
 
     Returns:
-        {"value": float|None, "unit": str|None,
-         "delta": float|None, "delta_pct": float|None}
+        {"value": Optional[float], "unit": Optional[str],
+         "delta": Optional[float], "delta_pct": Optional[float]}
     """
     result = {"value": None, "unit": None, "delta": None, "delta_pct": None}
     if not summary:
@@ -248,7 +250,7 @@ def parse_metric_values(summary: str) -> dict:
     return result
 
 
-def _create_metric_event(metric_name: str, text: str, time_anchor: str) -> dict | None:
+def _create_metric_event(metric_name: str, text: str, time_anchor: str) -> Optional[dict]:
     """为指标创建时间线事件，从文档中提取相关数据"""
     summary = _extract_metric_summary(metric_name, text)
     if not summary:
@@ -271,7 +273,7 @@ def _create_metric_event(metric_name: str, text: str, time_anchor: str) -> dict 
     }
 
 
-def _create_category_event(category_name: str, text: str, time_anchor: str) -> dict | None:
+def _create_category_event(category_name: str, text: str, time_anchor: str) -> Optional[dict]:
     """为品类创建时间线事件"""
     summary = _extract_category_summary(category_name, text)
     if not summary:
@@ -288,7 +290,7 @@ def _create_category_event(category_name: str, text: str, time_anchor: str) -> d
     }
 
 
-def _create_merchant_event(merchant_name: str, text: str, time_anchor: str) -> dict | None:
+def _create_merchant_event(merchant_name: str, text: str, time_anchor: str) -> Optional[dict]:
     """为商户类型创建时间线事件"""
     summary = _extract_merchant_summary(merchant_name, text)
     if not summary:
@@ -305,7 +307,7 @@ def _create_merchant_event(merchant_name: str, text: str, time_anchor: str) -> d
     }
 
 
-def _extract_metric_summary(metric_name: str, text: str) -> str | None:
+def _extract_metric_summary(metric_name: str, text: str) -> Optional[str]:
     """从文档中提取指标的数值摘要"""
     # 尝试从表格行中提取
     # 匹配格式：| 指标名 | 数值 | 数值 | 环比 | ...
@@ -332,7 +334,7 @@ def _extract_metric_summary(metric_name: str, text: str) -> str | None:
     return None
 
 
-def _extract_category_summary(category_name: str, text: str) -> str | None:
+def _extract_category_summary(category_name: str, text: str) -> Optional[str]:
     """从文档中提取品类的数值摘要"""
     lines = text.split("\n")
     for line in lines:
@@ -355,7 +357,7 @@ def _extract_category_summary(category_name: str, text: str) -> str | None:
     return None
 
 
-def _extract_merchant_summary(merchant_name: str, text: str) -> str | None:
+def _extract_merchant_summary(merchant_name: str, text: str) -> Optional[str]:
     """从文档中提取商户类型的数值摘要"""
     # 搜索商户名称及其变体
     search_terms = [merchant_name, merchant_name + "店", merchant_name + "商户"]

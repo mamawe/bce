@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 时间线构建器 - 将提取的事件按时间排序，关联决策，构建实体时间线
 """

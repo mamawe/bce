@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 LLM 提取器 - 调用智谱 GLM-4.7-Flash 从文档中提取结构化信息
 使用共享 llm_client，支持模型降级链

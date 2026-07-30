@@ -1,17 +1,16 @@
 #!/bin/bash
-# BCE 自定义运行时启动脚本
-# 冷启动: 安装依赖 → 复制 DB → 启动 FastAPI
+# BCE 自定义运行时启动脚本（离线依赖版）
 cd /code
 
-# 安装依赖（pip 缓存加速，第二次冷启动几乎秒装）
-pip install -r requirements.txt -q 2>/dev/null
+# 将预置依赖加入 PYTHONPATH
+export PYTHONPATH=/code/lib:$PYTHONPATH
 
-# 复制数据库到 /tmp（FC 唯一可写目录）
-cp bce.db /tmp/bce.db
+# 复制数据库到可写目录 /tmp
+cp bce.db /tmp/bce.db 2>/dev/null
 
-# 设置环境变量
+# 环境变量
 export BCE_DB_PATH=/tmp/bce.db
 export BCE_ENV=production
 
 # 启动 FastAPI
-exec python -m uvicorn app.main:app --host 0.0.0.0 --port 9000
+exec python3 -m uvicorn app.main:app --host 0.0.0.0 --port 9000

@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """
 预计算指标模块 - 所有计算在 SQL/Python 层完成，不经过 LLM
 为 /ask 端点和 LLM 洞察提供精确的数值数据
@@ -7,7 +9,7 @@ from collections import Counter
 from app import database as db
 
 
-def get_all_categories_latest(metric_name: str | None = None) -> list[dict]:
+def get_all_categories_latest(metric_name: Optional[str] = None) -> list[dict]:
     """
     查询所有品类最新一周的指标数据（用于"各品类对比"场景）。
     返回每个品类最新一周的指标列表。

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 回答校验模块 - 校验 LLM 生成的回答是否可靠
 检查：数字真实性、实体存在性、引用完整性

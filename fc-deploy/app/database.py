@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """
 BCE 数据库模块 - SQLite 存储层
 负责建表、CRUD 操作
@@ -518,7 +520,7 @@ def insert_document(doc_id: str, title: str, content: str, source_url: str, inge
         conn.close()
 
 
-def get_document(doc_id: str) -> dict | None:
+def get_document(doc_id: str) -> Optional[dict]:
     conn = get_connection()
     try:
         row = conn.execute("SELECT * FROM documents WHERE doc_id = ?", (doc_id,)).fetchone()
@@ -552,7 +554,7 @@ def upsert_entity(entity_id: str, entity_name: str, category: str, description: 
         conn.close()
 
 
-def get_entity(entity_id: str) -> dict | None:
+def get_entity(entity_id: str) -> Optional[dict]:
     conn = get_connection()
     try:
         row = conn.execute("SELECT * FROM entities WHERE entity_id = ?", (entity_id,)).fetchone()
@@ -607,7 +609,7 @@ def add_alias(entity_id: str, alias_name: str):
         conn.close()
 
 
-def find_entity_by_alias(alias_name: str) -> str | None:
+def find_entity_by_alias(alias_name: str) -> Optional[str]:
     """通过别名查找实体，返回 entity_id 或 None"""
     conn = get_connection()
     try:
@@ -622,8 +624,8 @@ def find_entity_by_alias(alias_name: str) -> str | None:
 
 def insert_event(event_id: str, entity_id: str, occurred_at: str, time_granularity: str,
                  summary: str, event_type: str, attribution: str, document_id: str,
-                 metric_value: float | None = None, metric_unit: str | None = None,
-                 metric_delta: float | None = None, metric_delta_pct: float | None = None,
+                 metric_value: Optional[float] = None, metric_unit: Optional[str] = None,
+                 metric_delta: Optional[float] = None, metric_delta_pct: Optional[float] = None,
                  sensitivity_level: int = 1, doc_version: int = 1):
     conn = get_connection()
     try:
@@ -727,7 +729,7 @@ def insert_decision(decision_id: str, event_id: str, action_taken: str, owner: s
         conn.close()
 
 
-def get_decision_for_event(event_id: str) -> dict | None:
+def get_decision_for_event(event_id: str) -> Optional[dict]:
     conn = get_connection()
     try:
         row = conn.execute("SELECT * FROM decisions WHERE event_id = ?", (event_id,)).fetchone()
@@ -781,7 +783,7 @@ def get_evidence_for_entity(entity_id: str) -> list[dict]:
 # ─── Hierarchy CRUD ────────────────────────────────────────────
 
 def upsert_entity_with_hierarchy(entity_id: str, entity_name: str, category: str,
-                                  description: str = "", parent_entity_id: str | None = None,
+                                  description: str = "", parent_entity_id: Optional[str] = None,
                                   level: int = 0, sort_order: int = 0):
     """创建或更新实体（含层级信息）"""
     conn = get_connection()
@@ -827,7 +829,7 @@ def get_children(entity_id: str) -> list[dict]:
         conn.close()
 
 
-def get_parent(entity_id: str) -> dict | None:
+def get_parent(entity_id: str) -> Optional[dict]:
     """获取父实体"""
     conn = get_connection()
     try:
@@ -867,7 +869,7 @@ def list_entities_with_hierarchy() -> list[dict]:
         conn.close()
 
 
-def get_document_by_title(title: str) -> dict | None:
+def get_document_by_title(title: str) -> Optional[dict]:
     """通过标题查找文档（用于重复检查）"""
     conn = get_connection()
     try:
@@ -880,7 +882,7 @@ def get_document_by_title(title: str) -> dict | None:
         conn.close()
 
 
-def get_document_by_source(source_url: str) -> dict | None:
+def get_document_by_source(source_url: str) -> Optional[dict]:
     """通过 source_url 查找文档（用于版本化重复检查）"""
     if not source_url:
         return None
@@ -1005,7 +1007,7 @@ def update_document(doc_id: str, title: str, content: str, source_url: str = "")
         conn.close()
 
 
-def get_entity_with_hierarchy(entity_id: str) -> dict | None:
+def get_entity_with_hierarchy(entity_id: str) -> Optional[dict]:
     """获取实体（含层级字段）"""
     conn = get_connection()
     try:
@@ -1101,7 +1103,7 @@ def get_entity_relationships(entity_id: str, min_confidence: float = 0.5) -> lis
 
 # ─── Push Event Tracking (埋点) ─────────────────────────────────
 
-def record_push_event(push_id: str, doc_id: str, user_id: str | None, event_type: str) -> str:
+def record_push_event(push_id: str, doc_id: str, user_id: Optional[str], event_type: str) -> str:
     """记录一条推送事件（sent / clicked / viewed），返回 event_id"""
     import uuid
     from datetime import datetime, timezone
@@ -1186,7 +1188,7 @@ def get_push_summary() -> dict:
 # ─── Users (推送链接权限实时校验) ────────────────────────────────
 
 def upsert_user(user_id: str, display_name: str = "", role: str = "viewer",
-                is_active: bool = True, max_sensitivity: int | None = None,
+                is_active: bool = True, max_sensitivity: Optional[int] = None,
                 has_global_view: bool = False, username: str = ""):
     """
     创建或更新用户。
@@ -1222,7 +1224,7 @@ def upsert_user(user_id: str, display_name: str = "", role: str = "viewer",
         conn.close()
 
 
-def get_user(user_id: str) -> dict | None:
+def get_user(user_id: str) -> Optional[dict]:
     """获取活跃用户；不存在或已停用时返回 None（供 JWT 登录 + 推送链接权限校验）"""
     conn = get_connection()
     try:
@@ -1237,8 +1239,8 @@ def get_user(user_id: str) -> dict | None:
 # ─── Insights (洞察收集与拆解) ──────────────────────────────────
 
 def insert_insight(insight_id: str, author_id: str, raw_text: str,
-                   push_id: str | None = None, doc_id: str | None = None,
-                   entity_id: str | None = None, metric_snapshot: str | None = None,
+                   push_id: Optional[str] = None, doc_id: Optional[str] = None,
+                   entity_id: Optional[str] = None, metric_snapshot: Optional[str] = None,
                    status: str = "pending") -> str:
     """
     存储原始洞察文本及其写作上下文。
@@ -1262,7 +1264,7 @@ def insert_insight(insight_id: str, author_id: str, raw_text: str,
         conn.close()
 
 
-def update_insight_status(insight_id: str, status: str, error_msg: str | None = None):
+def update_insight_status(insight_id: str, status: str, error_msg: Optional[str] = None):
     """更新洞察处理状态（异步任务追踪）"""
     from datetime import datetime, timezone
     conn = get_connection()
@@ -1278,8 +1280,8 @@ def update_insight_status(insight_id: str, status: str, error_msg: str | None = 
 
 def insert_insight_fragments(insight_id: str, author_id: str,
                               fragments: list[dict],
-                              entity_id: str | None = None,
-                              metric_snapshot: str | None = None) -> int:
+                              entity_id: Optional[str] = None,
+                              metric_snapshot: Optional[str] = None) -> int:
     """
     批量插入拆解后的片段。
     fragments: [{"category": "总结", "content": "..."}]
@@ -1310,7 +1312,7 @@ def insert_insight_fragments(insight_id: str, author_id: str,
         conn.close()
 
 
-def get_insight(insight_id: str) -> dict | None:
+def get_insight(insight_id: str) -> Optional[dict]:
     """获取单条原始洞察及其拆解片段"""
     conn = get_connection()
     try:
@@ -1357,7 +1359,7 @@ def list_insights_by_author(author_id: str, limit: int = 50) -> list[dict]:
         conn.close()
 
 
-def get_random_fragments(sample_size: int = 30, category: str | None = None) -> list[dict]:
+def get_random_fragments(sample_size: int = 30, category: Optional[str] = None) -> list[dict]:
     """
     随机抽取片段用于归纳（简单 RANDOM() 版本，保留向后兼容）。
     可按分类筛选，也可全分类随机。
@@ -1382,7 +1384,7 @@ def get_random_fragments(sample_size: int = 30, category: str | None = None) -> 
 
 
 def get_random_fragments_stratified(sample_size: int = 30,
-                                      category: str | None = None) -> list[dict]:
+                                      category: Optional[str] = None) -> list[dict]:
     """
     按作者分层随机抽样，避免单人主导归纳结果。
 
@@ -1488,7 +1490,7 @@ def get_random_fragments_stratified(sample_size: int = 30,
         conn.close()
 
 
-def get_recent_distillation_by_hash(sample_hash: str, within_hours: int = 24) -> dict | None:
+def get_recent_distillation_by_hash(sample_hash: str, within_hours: int = 24) -> Optional[dict]:
     """
     归纳去重：检查最近 within_hours 小时内是否已对相同 sample_hash 做过归纳。
     存在则返回该记录，调用方可跳过重复归纳。
@@ -1533,8 +1535,8 @@ def count_insights() -> int:
 
 def insert_distillation(distillation_id: str, batch_source: str, sample_size: int,
                          category_breakdown: str, summary: str, raw_llm_output: str,
-                         sample_hash: str | None = None,
-                         time_range: str | None = None,
+                         sample_hash: Optional[str] = None,
+                         time_range: Optional[str] = None,
                          author_count: int = 0):
     """
     存储一次随机归纳的产出（只入库，不接入生产流程）。

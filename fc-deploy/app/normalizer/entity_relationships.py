@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 跨文档实体关系模块 - 提取和存储实体间因果关系
 Tier 1 (confidence 0.9): LLM 显式因果陈述

@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """Permission checking: event-level sensitivity + category scope filtering.
 
 v5 修复记录：
@@ -100,7 +102,7 @@ def filter_events_by_sensitivity(events: list, user: dict) -> list:
     return filtered
 
 
-def get_user_from_request(request: Request) -> dict | None:
+def get_user_from_request(request: Request) -> Optional[dict]:
     """
     从请求头解析用户身份（v5.2 增强）。
 
@@ -163,7 +165,7 @@ def get_user_from_request(request: Request) -> dict | None:
     }
 
 
-def require_role_above(user: dict | None, min_role: str) -> None:
+def require_role_above(user: Optional[dict], min_role: str) -> None:
     """
     简单角色门槛校验。不通过则直接抛 403。
     用于 distill 等管理类操作（避免普通用户随意触发 LLM 归纳消耗资源）。

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 共享 LLM 客户端 - 用于 /ask 端点和 LLM 洞察生成
 支持模型降级链：主选模型失败时自动尝试备选模型
@@ -14,7 +15,7 @@ v5.2 优化记录：
 import asyncio
 import json
 import time
-from typing import Any, AsyncGenerator
+from typing import Any, AsyncGenerator, Optional
 
 import httpx
 
@@ -27,10 +28,10 @@ _min_interval: float = 0.8  # 最小请求间隔（秒），从 2.0 降到 0.8
 _rate_lock = asyncio.Lock()
 
 # 全局错误追踪（便于排查，不阻塞流程）
-_last_error: str | None = None
+_last_error: Optional[str] = None
 
 # ─── 连接复用 ──────────────────────────────────────────────────
-_http_client: httpx.AsyncClient | None = None
+_http_client: httpx.Optional[AsyncClient] = None
 
 
 def _get_client() -> httpx.AsyncClient:
@@ -49,7 +50,7 @@ async def close_client():
         _http_client = None
 
 
-def get_last_error() -> str | None:
+def get_last_error() -> Optional[str]:
     """获取最近一次 LLM 调用失败原因（用于审计/排查）"""
     return _last_error
 
@@ -84,8 +85,8 @@ async def _call_single_model(
     messages: list[dict],
     temperature: float,
     timeout: float,
-    max_tokens: int | None = None,
-    response_format: dict | None = None,
+    max_tokens: Optional[int] = None,
+    response_format: Optional[dict] = None,
 ) -> str:
     """
     调用单个模型，返回原始文本。
@@ -168,7 +169,7 @@ async def _call_single_model(
 
 async def generate(
     prompt: str,
-    system_prompt: str | None = None,
+    system_prompt: Optional[str] = None,
     temperature: float = 0.3,
     timeout: float = 15.0,
     max_tokens: int = 1024,
@@ -205,7 +206,7 @@ async def generate(
 
 async def generate_json(
     prompt: str,
-    system_prompt: str | None = None,
+    system_prompt: Optional[str] = None,
     temperature: float = 0.1,
     timeout: float = 15.0,
 ) -> dict[str, Any]:
@@ -239,7 +240,7 @@ async def generate_json(
 
 async def generate_stream(
     messages: list[dict],
-    model: str | None = None,
+    model: Optional[str] = None,
     temperature: float = 0.5,
     timeout: float = 60.0,
 ) -> AsyncGenerator[str, None]:

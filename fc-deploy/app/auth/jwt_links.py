@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import Optional
 """
 JWT 工具模块（v5.2 扩展）。
 - 原有：推送链接 JWT（generate_push_link / validate_push_link / check_link_access）
@@ -96,7 +98,7 @@ def generate_user_token(user_id: str, username: str = "") -> str:
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def validate_user_token(token: str) -> dict | None:
+def validate_user_token(token: str) -> Optional[dict]:
     """
     验证用户登录 JWT。
     返回 payload（含 user_id/username），失败返回 None。
