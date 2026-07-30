@@ -7,7 +7,8 @@ import { MOCK_CONTEXTS, MOCK_ENTITIES, buildFallbackContext } from './data/mockD
 
 const BASE = '/api/v1'
 const TIMEOUT_MS = 2500
-const CONTEXT_TIMEOUT_MS = 5000 // /context 含数据库查询，放宽到 5s
+const ENTITIES_TIMEOUT_MS = 15000 // /entities / /entities/hierarchy 冷启动+全量查询，放宽到 15s
+const CONTEXT_TIMEOUT_MS = 10000 // /context 含数据库查询，放宽到 10s
 const ASK_TIMEOUT_MS = 30000 // /ask 需要 LLM 推理，超时放宽到 30s
 const INSIGHT_TIMEOUT_MS = 30000 // /context/{id}/insight 需要 LLM 推理
 const INGEST_TIMEOUT_MS = 300000 // /documents/ingest 需要 LLM 抽取，超时放宽到 5min
@@ -77,7 +78,7 @@ export interface LoadResult<T> {
 
 export async function loadEntities(): Promise<LoadResult<Entity[]>> {
   try {
-    const json = (await tryFetchJson('/entities')) as { entities?: Entity[] }
+    const json = (await tryFetchJson('/entities', ENTITIES_TIMEOUT_MS)) as { entities?: Entity[] }
     if (Array.isArray(json?.entities) && json.entities.length > 0) {
       return { data: json.entities, live: true }
     }
@@ -118,7 +119,7 @@ export async function loadInsight(entityId: string): Promise<InsightResult | nul
 
 export async function loadEntityHierarchy(): Promise<LoadResult<EntityTreeNode>> {
   try {
-    const json = (await tryFetchJson('/entities/hierarchy')) as { tree?: EntityTreeNode }
+    const json = (await tryFetchJson('/entities/hierarchy', ENTITIES_TIMEOUT_MS)) as { tree?: EntityTreeNode }
     if (json?.tree && Object.keys(json.tree).length > 0) {
       return { data: json.tree, live: true }
     }
